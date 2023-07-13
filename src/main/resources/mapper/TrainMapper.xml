@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nuc.ss.mapper.TrainMapper">
+    <insert id="insertTrain">
+        insert into train_inf(emp_id,dept_id,job_id,content,startdata,enddata,totallength
+        ,completion,grade,traintime) values (#{empId},#{deptId},#{jobId}
+        ,#{content},#{startdata},#{enddata},#{totallength},#{completion},#{grade},#{traintime})
+    </insert>
+    <insert id="insertTrainData">
+        insert into traindata_inf(title,filename,remark,createdate,user_id) values (#{title},#{filename},#{remark},#{createdate},#{userId})
+    </insert>
+    <update id="updateTrain">
+        update train_inf set content=#{content},startdata=#{startdata},
+        enddata=#{enddata},totallength=#{totallength},completion=#{completion},grade=#{grade} where id = #{id}
+    </update>
+    <update id="updateTrainData">
+        update traindata_inf set title=#{title},filename=#{filename},remark=#{remark} where id=#{id}
+    </update>
+    <delete id="deleteTrain">
+        delete from train_inf where id=#{id}
+    </delete>
+    <delete id="deleteTrainData">
+        delete from traindata_inf where id=#{id}
+    </delete>
+
+    <select id="getAllTrain" resultType="nuc.ss.bean.Train">
+        select train_inf.*,
+               employee_inf.name     employeename,
+               job_inf.name           jobname,
+               dept_inf.name          deptname ,
+completion_inf.name completionname
+from train_inf
+LEFT JOIN employee_inf on train_inf.emp_id = employee_inf.id
+LEFT JOIN job_inf on train_inf.job_id = job_inf.id
+LEFT JOIN dept_inf on train_inf.dept_id = dept_inf.id
+LEFT JOIN completion_inf on train_inf.completion = completion_inf.id
+
+    </select>
+    <select id="getAllCompletion" resultType="nuc.ss.bean.Completion">
+        select * from completion_inf
+    </select>
+    <select id="getByIdTrain" resultType="nuc.ss.bean.Train">
+        select train_inf.*,
+               employee_inf.name     employeename,
+               job_inf.name           jobname,
+               dept_inf.name          deptname ,
+completion_inf.name completionname
+from train_inf
+LEFT JOIN employee_inf on train_inf.emp_id = employee_inf.id
+LEFT JOIN job_inf on train_inf.job_id = job_inf.id
+LEFT JOIN dept_inf on train_inf.dept_id = dept_inf.id
+LEFT JOIN completion_inf on train_inf.completion = completion_inf.id
+where train_inf.id=#{id}
+    </select>
+    <select id="getAllTrainDate" resultType="nuc.ss.bean.TrainData">
+        SELECT traindata_inf.*, user_inf.username
+        FROM traindata_inf
+                 LEFT JOIN user_inf ON traindata_inf.user_id = user_inf.id
+    </select>
+    <select id="getByIdTrainData" resultType="nuc.ss.bean.TrainData">
+        select * from traindata_inf where id=#{id}
+    </select>
+    <select id="getTrainDataBytitle" resultType="nuc.ss.bean.TrainData">
+        select * from traindata_inf where title like #{title}
+    </select>
+    <select id="getByEmpIdTrain" resultType="nuc.ss.bean.Train">
+         select train_inf.*,
+               employee_inf.name     employeename,
+               job_inf.name           jobname,
+               dept_inf.name          deptname ,
+completion_inf.name completionname
+from train_inf
+LEFT JOIN employee_inf on train_inf.emp_id = employee_inf.id
+LEFT JOIN job_inf on train_inf.job_id = job_inf.id
+LEFT JOIN dept_inf on train_inf.dept_id = dept_inf.id
+LEFT JOIN completion_inf on train_inf.completion = completion_inf.id
+where train_inf.emp_id=#{id}
+    </select>
+
+</mapper>

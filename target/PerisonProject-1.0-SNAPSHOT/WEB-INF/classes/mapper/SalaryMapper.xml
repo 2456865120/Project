@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nuc.ss.mapper.SalaryMapper">
+    <insert id="insert">
+        insert into salary_inf(DEPT_ID, JOB_ID, EMP_ID, SALARY_STATION, SALARY_LEVEL, SENIORITY_PAY, PERFORMANCE,
+                               INDIVIDUAL_INCOME, CREATE_DATE)
+        values (#{deptId}, #{jobId}, #{empId}, #{salaryStation}, #{salaryLevel}, #{seniorityPay}, #{performance},
+                #{individualIncome}, #{createDate})
+    </insert>
+    <update id="update">
+        update salary_inf set SALARY_STATION=#{salaryStation},
+            SALARY_LEVEL=#{salaryLevel},
+            SENIORITY_PAY=#{seniorityPay},
+            PERFORMANCE=#{performance},
+            INDIVIDUAL_INCOME=#{individualIncome}
+        where id=#{id}
+    </update>
+
+
+    <select id="getAll" resultType="nuc.ss.bean.Salary">
+        SELECT salary_inf.*,
+               employee_inf.name     employeename,
+               job_inf.name           jobname,
+               dept_inf.name          deptname
+        FROM salary_inf
+                 LEFT JOIN employee_inf on salary_inf.EMP_ID = employee_inf.id
+                 LEFT JOIN job_inf on salary_inf.JOB_ID = job_inf.id
+                 LEFT JOIN dept_inf on salary_inf.DEPT_ID = dept_inf.id
+    </select>
+    <select id="getBtId" resultType="nuc.ss.bean.Salary">
+        SELECT salary_inf.*,
+               employee_inf.name     employeename,
+               job_inf.name           jobname,
+               dept_inf.name          deptname
+        FROM salary_inf
+                 LEFT JOIN employee_inf on salary_inf.EMP_ID = employee_inf.id
+                 LEFT JOIN job_inf on salary_inf.JOB_ID = job_inf.id
+                 LEFT JOIN dept_inf on salary_inf.DEPT_ID = dept_inf.id where salary_inf.id=#{id}
+    </select>
+</mapper>

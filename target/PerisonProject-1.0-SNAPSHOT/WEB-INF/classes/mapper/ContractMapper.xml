@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nuc.ss.mapper.ContractMapper">
+    <insert id="add">
+         insert into contract_inf(TRAIN_CONTRACT, LABOR_CONTRACT, CONFIDENTIALITY_CONTRACT, EMP_ID, DEPT_ID, JOB_ID)
+        values (#{trainContractid}, #{laborContractid}, #{confidentialityContractid}, #{empId}, #{deptId},
+                #{jobId})
+
+    </insert>
+    <update id="update">
+         update contract_inf
+        set TRAIN_CONTRACT=#{trainContractid},
+            LABOR_CONTRACT=#{laborContractid},
+            CONFIDENTIALITY_CONTRACT=#{confidentialityContractid}
+        where id = #{id}
+    </update>
+    <delete id="delete">
+        delete
+        from contract_inf
+        where id = #{id}
+    </delete>
+
+    <select id="getAll" resultType="nuc.ss.bean.Contract">
+         SELECT contract_inf.*,
+               contract_inf.TRAIN_CONTRACT           trainContractId,
+               contract_inf.LABOR_CONTRACT           laborContractid,
+               contract_inf.CONFIDENTIALITY_CONTRACT confidentialityContractid,
+               employee_inf.`name`                   employeename,
+               job_inf.`name`                        jobname,
+               dept_inf.`name`                       deptname
+        FROM contract_inf
+                 LEFT JOIN employee_inf on contract_inf.EMP_ID = employee_inf.id
+                 LEFT JOIN job_inf on contract_inf.JOB_ID = job_inf.id
+                 LEFT JOIN dept_inf on contract_inf.DEPT_ID = dept_inf.id
+    </select>
+    <select id="getById" resultType="nuc.ss.bean.Contract">
+        SELECT contract_inf.*,
+               contract_inf.TRAIN_CONTRACT           trainContractId,
+               contract_inf.LABOR_CONTRACT           laborContractid,
+               contract_inf.CONFIDENTIALITY_CONTRACT confidentialityContractid,
+               employee_inf.`name`                   employeename,
+               job_inf.`name`                        jobname,
+               dept_inf.`name`                       deptname
+        FROM contract_inf
+                 LEFT JOIN employee_inf on contract_inf.EMP_ID = employee_inf.id
+                 LEFT JOIN job_inf on contract_inf.JOB_ID = job_inf.id
+                 LEFT JOIN dept_inf on contract_inf.DEPT_ID = dept_inf.id
+        where contract_inf.id = #{id}
+    </select>
+    <select id="getPById" resultType="nuc.ss.bean.Contract">
+         SELECT contract_inf.*,
+               traincontract_inf.name trainContractname,
+               laborcontract_inf.name laborContractname,
+               confidentialitycontract_inf.name confidentialityContractname,
+               employee_inf.`name`                   employeename,
+               job_inf.`name`                        jobname,
+               dept_inf.`name`                       deptname
+        FROM contract_inf
+                 LEFT JOIN employee_inf on contract_inf.EMP_ID = employee_inf.id
+                 LEFT JOIN job_inf on contract_inf.JOB_ID = job_inf.id
+                 LEFT JOIN dept_inf on contract_inf.DEPT_ID = dept_inf.id
+                 LEFT JOIN traincontract_inf on traincontract_inf.id = contract_inf.TRAIN_CONTRACT
+                 LEFT JOIN laborcontract_inf on laborcontract_inf.id = contract_inf.LABOR_CONTRACT
+                 LEFT JOIN confidentialitycontract_inf on confidentialitycontract_inf.id = contract_inf.CONFIDENTIALITY_CONTRACT
+        where contract_inf.ID = #{id}
+    </select>
+</mapper>

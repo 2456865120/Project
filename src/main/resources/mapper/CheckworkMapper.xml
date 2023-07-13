@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nuc.ss.mapper.CheckworkMapper">
+    <insert id="insert">
+        insert into checkwork_inf( WORKINGDAYS,DAYSLEAVE,DAYSOUT,EMP_ID,DEPT_ID,JOB_ID,CREATEDATE)
+        values (#{workingdays}, #{daysleave},#{daysout},#{empId},#{deptId},#{jobId},#{creatdate})
+    </insert>
+    <update id="update">
+update checkwork_inf
+        set WORKINGDAYS=#{workingdays},
+            DAYSLEAVE=#{daysleave},
+            DAYSOUT=#{daysout}
+        where id = #{id}</update>
+    <delete id="delete">
+         delete
+        from checkwork_inf
+        where id = #{id}
+    </delete>
+
+
+    <select id="getAll" resultType="nuc.ss.bean.Checkwork">
+         SELECT checkwork_inf.*,
+               employee_inf.`name`      employeename,
+               job_inf.`name`           jobname,
+               dept_inf.`name`          deptname,
+               checkwork_inf.CREATEDATE creatdate
+        FROM checkwork_inf
+                 LEFT JOIN employee_inf on checkwork_inf.EMP_ID = employee_inf.id
+                 LEFT JOIN job_inf on checkwork_inf.JOB_ID = job_inf.id
+                 LEFT JOIN dept_inf on checkwork_inf.DEPT_ID = dept_inf.id
+    </select>
+    <select id="getById" resultType="nuc.ss.bean.Checkwork">
+         select *
+        from checkwork_inf
+        where id = #{id}
+    </select>
+    <select id="getByName" resultType="nuc.ss.bean.Employee">
+         select *
+        from employee_inf
+        where name = #{name}
+    </select>
+    <select id="getPById" resultType="nuc.ss.bean.Checkwork">
+         SELECT checkwork_inf.*,
+               employee_inf.`name`      employeename,
+               job_inf.`name`           jobname,
+               dept_inf.`name`          deptname,
+               checkwork_inf.CREATEDATE creatdate
+        FROM checkwork_inf
+                 LEFT JOIN employee_inf on checkwork_inf.EMP_ID = employee_inf.id
+                 LEFT JOIN job_inf on checkwork_inf.JOB_ID = job_inf.id
+                 LEFT JOIN dept_inf on checkwork_inf.DEPT_ID = dept_inf.id where checkwork_inf.EMP_ID = #{id}
+    </select>
+</mapper>

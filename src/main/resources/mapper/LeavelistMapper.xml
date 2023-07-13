@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nuc.ss.mapper.LeavelistMapper">
+    <insert id="add">
+        insert into leave_inf(emp_id,dept_id,job_id,startdata,enddata,leavedays,leavetype,content,leavestatus,leavetime)
+        values(#{empId},#{deptId},#{jobId},#{startdata},#{enddata},#{leavedays},#{leavetype},#{content},#{leavestatus},#{leavetime})
+    </insert>
+    <update id="update">
+        update leave_inf
+        set leavedays=#{leavedays},
+            leavetype=#{leavetype},
+            leavestatus=#{leavestatus}
+        where id = #{id}
+    </update>
+    <delete id="delete">
+        delete from leave_inf where id=#{id}
+    </delete>
+
+    <select id="AdminGetAll" resultType="nuc.ss.bean.Leave">
+        select *,job_inf.name as jobname,dept_inf.name as deptname,employee_inf.name as employeename
+        ,leavetype_inf.name as leavetypename,leavestatus_inf.name as leavestatusname from leave_inf
+        LEFT JOIN employee_inf on leave_inf.emp_id = employee_inf.id
+                 LEFT JOIN job_inf on leave_inf.job_id = job_inf.id
+                 LEFT JOIN dept_inf on leave_inf.dept_id = dept_inf.id
+                 LEFT JOIN leavetype_inf on leave_inf.leavetype = leavetype_inf.id
+                 LEFT JOIN leavestatus_inf on leave_inf.leavestatus = leavestatus_inf.id
+
+    </select>
+    <select id="getById" resultType="nuc.ss.bean.Leave">
+        select * from leave_inf where id = #{id}
+    </select>
+    <select id="getAllType" resultType="nuc.ss.bean.LeaveType">
+        select * from leavetype_inf
+    </select>
+    <select id="getAllStatus" resultType="nuc.ss.bean.LeaveStatus">
+        select * from leavestatus_inf
+    </select>
+
+</mapper>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nuc.ss.mapper.EmployeeMapper">
+    <insert id="insert">
+         insert into employee_inf(dept_id, job_id, name, card_id, address, phone,
+                                 sex_id, education_id, creatTimeStr, user_id)
+        values (#{deptId}, #{jobId}, #{name}, #{cardId}, #{address}, #{phone}, #{sexId}, #{educationId},
+                #{creatTimeStr}, #{userId})
+    </insert>
+    <insert id="addMultiple">
+        insert into employee_inf(dept_id, job_id, name, card_id, address, phone,
+                                 sex_id, education_id, creatTimeStr, user_id)
+        values 
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.deptId}, #{item.jobId}, #{item.name}, #{item.cardId}, #{item.address}, #{item.phone}, #{item.sexId}, #{item.educationId},
+            #{item.creatTimeStr}, #{item.userId}
+            )
+        </foreach>
+    </insert>
+    <update id="update">
+        update employee_inf
+        set dept_id=#{deptId},
+            job_id=#{jobId},
+            name=#{name},
+            card_id=#{cardId},
+            address=#{address},
+            phone=#{phone},
+            sex_id=#{sexId},
+            education_id=#{educationId}
+        where id = #{id}
+    </update>
+    <update id="uppdate">
+        update employee_inf
+        set dept_id=#{deptId},
+            job_id=#{jobId},
+            address=#{address},
+            phone=#{phone},
+            sex_id=#{sexId},
+            education_id=#{educationId}
+        where id = #{id}
+    </update>
+
+    <select id="getAll" resultType="nuc.ss.bean.Employee">
+SELECT * ,user_inf.email as useremail,user_inf.username,dept_inf.`name` AS deptname,job_inf.`name` AS jobname,education_inf.`name` as educationname
+from employee_inf
+LEFT JOIN user_inf ON employee_inf.user_id=user_inf.id
+LEFT JOIN dept_inf ON employee_inf.dept_id=dept_inf.id
+LEFT JOIN job_inf ON employee_inf.job_id=job_inf.id
+LEFT JOIN education_inf ON employee_inf.education_id = education_inf.id
+
+    </select>
+    <delete id="delete">
+        delete from employee_inf where id=#{id}
+    </delete>
+
+    <select id="getById" resultType="nuc.ss.bean.Employee">
+SELECT * ,user_inf.email as useremail,user_inf.username,dept_inf.`name` AS deptname,job_inf.`name` AS jobname,education_inf.`name` as educationname,sex_inf.name as sexname
+from employee_inf
+LEFT JOIN user_inf ON employee_inf.user_id=user_inf.id
+LEFT JOIN dept_inf ON employee_inf.dept_id=dept_inf.id
+LEFT JOIN job_inf ON employee_inf.job_id=job_inf.id
+left join sex_inf on employee_inf.sex_id=sex_inf.id
+LEFT JOIN education_inf ON employee_inf.education_id = education_inf.id
+where employee_inf.id = #{id}
+    </select>
+    <select id="getByName" resultType="nuc.ss.bean.Employee">
+        SELECT * ,user_inf.email as useremail,user_inf.username,dept_inf.`name` AS deptname,job_inf.`name` AS jobname,education_inf.`name` as educationname
+from employee_inf
+LEFT JOIN user_inf ON employee_inf.user_id=user_inf.id
+LEFT JOIN dept_inf ON employee_inf.dept_id=dept_inf.id
+LEFT JOIN job_inf ON employee_inf.job_id=job_inf.id
+LEFT JOIN education_inf ON employee_inf.education_id = education_inf.id
+        WHERE employee_inf.name LIKE #{name}
+    </select>
+</mapper>

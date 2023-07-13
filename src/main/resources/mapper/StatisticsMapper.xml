@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nuc.ss.mapper.StatisticsMapper">
+    <select id="getSexCount" resultType="nuc.ss.bean.SexCount">
+        select sex_inf.name as name,count(*) as  value from employee_inf left join sex_inf on employee_inf.sex_id=sex_inf.id where sex_id = #{id}
+    </select>
+    <select id="getRmployee" resultType="java.lang.Integer">
+         select count(*) from employee_inf where job_id=#{id}
+    </select>
+    <select id="getAddress" resultType="nuc.ss.bean.Address">
+        SELECT address name,COUNT(address) value from employee_inf GROUP BY address
+    </select>
+
+</mapper>

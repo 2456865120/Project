@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nuc.ss.mapper.UserVisitMapper">
+
+    <insert id="addUserVisit" useGeneratedKeys="true" keyProperty="id">
+        insert into uservisit_inf
+            (loginname,login_time,visit_ip,iphone,user_address,user_from)
+        values
+            (#{loginname}, #{loginTime}, #{visitIp}, #{iphone}, #{userAddress}, #{userFrom})
+    </insert>
+    <update id="updateExitTimeById">
+        update uservisit_inf set exit_time=#{exitTime} where id = #{id};
+    </update>
+    <delete id="deleter">
+        delete from uservisit_inf where id = #{id}
+    </delete>
+    <select id="queryAll" resultType="UserVisit">
+        select * from uservisit_inf
+    </select>
+    <select id="queryByIp" resultType="UserVisit">
+        select * from uservisit_inf where visit_ip=#{ip}
+    </select>
+</mapper>

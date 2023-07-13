@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+<context:component-scan base-package="nuc.ss.mapper"></context:component-scan>
+<context:component-scan base-package="nuc.ss.service"></context:component-scan>
+
+	
+	<context:property-placeholder location="classpath:db.properties"/>
+	
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+		<property name="driverClassName" value="${jdbc.driver}"></property>
+		<property name="url" value="${jdbc.url}"></property>
+		<property name="username" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+	</bean>
+	
+	
+	<!-- 以下是整合mybatis的配置 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 读取mybatis的配置文件信息 -->
+		<property name="configLocation" value="classpath:mybatis-config.xml"></property>
+		<!-- 给mybatis设置数据源 -->
+		<property name="dataSource" ref="dataSource"></property>
+		
+		<!-- 给实体类设置别名 -->
+		<property name="typeAliasesPackage" value="nuc.ss.bean"></property>
+		
+		<!-- 设置mapper映射文件的路径 -->
+		<property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+	</bean>
+	
+	<!-- mapper接口交给spring容器去管理 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="nuc.ss.mapper"></property>
+	</bean>
+	<!-- ################################ -->
+	
+	
+	<!-- 以下是spring的事务的配置 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<aop:config>
+		<aop:pointcut expression="execution(* nuc.ss.service.*.*(..))" id="txPoint"/>
+		<aop:advisor advice-ref="mytx" pointcut-ref="txPoint"/>
+	</aop:config>
+	<!-- 基于xml的事务声明 -->
+	<tx:advice id="mytx" transaction-manager="transactionManager">
+		<tx:attributes>
+			<!-- 给满足expression="* com.lanou.tra.service.*.*(..)" 中的方法 并且 方法是以query开头的
+			设置对应的事务属性 -->
+			<tx:method name="query*" propagation="SUPPORTS" read-only="true"/>
+			<!-- add结算 订单表插入一条数据 余额减少 库存要减少 一般做项目 add都是一个业务    
+				项目中所有的业务添加的方法都要以add开头-->
+			<tx:method name="add*" propagation="REQUIRED"/>
+			<tx:method name="update*" propagation="REQUIRED"/>
+			<tx:method name="del*" propagation="REQUIRED"/>
+		</tx:attributes>
+	</tx:advice>
+
+</beans>

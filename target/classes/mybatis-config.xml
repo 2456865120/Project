@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	 <!-- <properties resource="db.properties"/> -->
+	
+	<settings>
+		<!-- 驼峰命名 -->
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+		<!-- <setting name="cacheEnabled" value="true"/>  -->
+		
+		<!-- 懒加载 -->
+		<!-- <setting name="lazyLoadingEnabled" value="true"/> -->
+	</settings>
+
+
+    <plugins>
+        <!-- com.github.pagehelper为PageHelper类所在包名 -->
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!-- 如果pageNum超出合法范围，是否返回正确结果 -->
+            <property name="reasonable" value="true"/>
+            <!-- 如果pageSize传入0，是否返回所有数据（不分页） -->
+            <property name="pageSizeZero" value="true"/>
+        </plugin>
+    </plugins>
+	
+	
+	<!-- <typeAliases>
+		<typeAlias type="" alias=""/>
+		<package name="com.lanou.bean"/>
+	</typeAliases>
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <mappers>
+  
+  	<package name="com.lanou.mapper"/>
+    <mapper resource="UserMapper.xml"/>
+  </mappers>  -->
+</configuration>

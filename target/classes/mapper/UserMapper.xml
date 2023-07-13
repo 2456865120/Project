@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nuc.ss.mapper.UserMapper">
+    <insert id="regist">
+        insert into user_inf(loginname,password,email,username,emp_id) values(#{loginname},#{password},#{email},#{username},#{empId})
+    </insert>
+    <insert id="insert">
+        insert into user_inf(loginname,password,email,username,emp_id) values(#{loginname},#{password},#{email},#{username},#{empId})
+    </insert>
+    <update id="setPassword">
+        update user_inf set password=#{password} where loginname=#{loginname}
+    </update>
+    <update id="update">
+        update user_inf set loginname=#{loginname},username=#{username},emp_id=#{empId},status_id=#{statusId} where id = #{id}
+    </update>
+    <update id="uppdate">
+         update user_inf set loginname=#{loginname},username=#{username},email=#{email},password=#{password} where id = #{id}
+    </update>
+    <delete id="delete">
+        delete from user_inf where id = #{id}
+    </delete>
+    <select id="login"  resultType="User_inf">
+        select * from user_inf where loginname=#{name} and password=#{password}
+    </select>
+    <select id="check_Register_loginname" resultType="User_inf">
+        select * from user_inf where loginname=#{loginname}
+    </select>
+    <select id="check_Register_username" resultType="User_inf">
+         select * from user_inf where username=#{username}
+    </select>
+    <select id="check_Register_email" resultType="User_inf">
+         select * from user_inf where email=#{email}
+    </select>
+    <select id="queryByLoginnameAndEmail" resultType="User_inf">
+        select * from user_inf where email=#{email} and loginname=#{loginname}
+    </select>
+    <select id="getAll"  resultType="User_inf">
+        select * from user_inf
+    </select>
+    <select id="getAllByName" resultType="nuc.ss.bean.User_inf">
+        select * from User_inf where loginname LIKE #{name}
+    </select>
+    <select id="getById" resultType="nuc.ss.bean.User_inf">
+        select * from user_inf where id=#{id}
+    </select>
+</mapper>

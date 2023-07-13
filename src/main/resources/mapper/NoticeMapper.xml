@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nuc.ss.mapper.NoticeMapper">
+
+
+    <insert id="insert">
+        insert into notice_inf(title,content,user_id) values (#{title},#{content},#{userId})
+    </insert>
+    <update id="update">
+        update notice_inf set title=#{title},content=#{content} where id=#{id}
+    </update>
+    <delete id="delete">
+        delete from notice_inf where id=#{id}
+    </delete>
+    <select id="getAll" resultType="nuc.ss.bean.Notice">
+        select notice_inf.*,user_inf.username from notice_inf left join user_inf on notice_inf.user_id=user_inf.id
+    </select>
+    <select id="getById" resultType="nuc.ss.bean.Notice">
+        select * from notice_inf where id = #{id}
+    </select>
+    <select id="getByName" resultType="nuc.ss.bean.Notice">
+        select * from notice_inf where title like #{name}
+    </select>
+</mapper>
